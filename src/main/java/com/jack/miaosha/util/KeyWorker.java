@@ -6,6 +6,9 @@ import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Enumeration;
 
+/**
+ * 这里使用twitter的雪花算法，用于生成主键key
+ */
 public class KeyWorker {
     private final static long twepoch = 12888349746579L;
     // 机器标识位数
@@ -29,30 +32,31 @@ public class KeyWorker {
     private long sequence = 0L;
     //服务器ID
     private long workerId = 1L;
-    private static long workerMask= -1L ^ (-1L << workerIdBits);
+    private static long workerMask = -1L ^ (-1L << workerIdBits);
     //进程编码
     private long processId = 1L;
-    private static long processMask=-1L ^ (-1L << datacenterIdBits);
+    private static long processMask = -1L ^ (-1L << datacenterIdBits);
     private static KeyWorker keyWorker = null;
 
-    static{
-        keyWorker=new KeyWorker();
+    static {
+        keyWorker = new KeyWorker();
     }
-    public static synchronized String nextId(){
-        return keyWorker.getNextId()+"";
+
+    public static synchronized String nextId() {
+        return keyWorker.getNextId() + "";
     }
 
     private KeyWorker() {
 
         //获取机器编码
-        this.workerId=this.getMachineNum();
+        this.workerId = this.getMachineNum();
         //获取进程编码
         RuntimeMXBean runtimeMXBean = ManagementFactory.getRuntimeMXBean();
-        this.processId=Long.valueOf(runtimeMXBean.getName().split("@")[0]).longValue();
+        this.processId = Long.valueOf(runtimeMXBean.getName().split("@")[0]).longValue();
 
         //避免编码超出最大值
-        this.workerId=workerId & workerMask;
-        this.processId=processId & processMask;
+        this.workerId = workerId & workerMask;
+        this.processId = processId & processMask;
     }
 
     public synchronized String getNextId() {
@@ -80,11 +84,12 @@ public class KeyWorker {
         lastTimestamp = timestamp;
         // ID偏移组合生成最终的ID，并返回ID
         long nextId = ((timestamp - twepoch) << timestampLeftShift) | (processId << datacenterIdShift) | (workerId << workerIdShift) | sequence;
-        return nextId +"";
+        return nextId + "";
     }
 
     /**
      * 再次获取时间戳直到获取的时间戳与现有的不同
+     *
      * @param lastTimestamp
      * @return 下一个时间戳
      */
@@ -102,9 +107,10 @@ public class KeyWorker {
 
     /**
      * 获取机器编码
+     *
      * @return
      */
-    private long getMachineNum(){
+    private long getMachineNum() {
         long machinePiece;
         StringBuilder sb = new StringBuilder();
         Enumeration<NetworkInterface> e = null;

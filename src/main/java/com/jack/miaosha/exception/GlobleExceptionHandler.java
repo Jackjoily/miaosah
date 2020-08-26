@@ -14,6 +14,13 @@ import java.util.List;
 @ControllerAdvice
 @ResponseBody
 public class GlobleExceptionHandler {
+    /**
+     * 写了一个全局异常的解析器，定义了一些，通用的异常的，这样异常返回，就能清晰定义到这是什么异常
+     * @param request
+     * @param e
+     * @return
+     */
+
     @ExceptionHandler(value = Exception.class)
     public Result<String> exceptionHandler(HttpServletRequest request, Exception e) {
         e.printStackTrace();

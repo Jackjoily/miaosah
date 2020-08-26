@@ -6,6 +6,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import redis.clients.jedis.JedisPool;
 
+import java.util.ArrayList;
+
 @SpringBootTest
 class MiaoshaApplicationTests {
 
@@ -16,6 +18,7 @@ class MiaoshaApplicationTests {
     void contextLoads() {
         JedisPool jedisPool = redisPoolFactory.JedisFactory();
         System.out.println(jedisPool.getResource());
+        ArrayList<Integer> list=new ArrayList<>();
     }
 
 }
